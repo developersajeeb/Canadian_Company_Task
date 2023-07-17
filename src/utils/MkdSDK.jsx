@@ -112,27 +112,31 @@ export default function MkdSDK() {
   };
 
   this.check = async function (role) {
-    return fetch('https://reacttask.mkdlabs.com/v2/api/lambda/login', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: "adminreacttask@manaknight.com",
-        password: "a123456",
-        role: "admin"
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error("Role checked failed");
+    try {
+      const response = await fetch(
+        "https://reacttask.mkdlabs.com/v2/api/lambda/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: "adminreacttask@manaknight.com",
+            password: "a123456",
+            role: "admin",
+          }),
         }
-      })
-      .catch((error) => {
-        console.log(error);
-        throw error;
-      });
-  };
+      );
+  
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      } else {
+        throw new Error("Role check failed");
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };  
 
   return this;
 }
